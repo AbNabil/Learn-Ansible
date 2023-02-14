@@ -12,29 +12,31 @@
 
 - name: Create new user for node app
   hosts: 34.210.235.139
+  vars_files:
+    - project-vars
   tasks:
   - name: Create Linux user
     user:
-      name: abd
+      name: "{{user}}"
       group: admin
-
-
 
 - name: Deploy Nodejs App
   hosts: 34.210.235.139
+  vars_files:
+    - project-vars
   become: True
-  become_user: abd 
+  become_user: "{{user}}"
   tasks: 
   - name: Unpack the nodejs file
     unarchive: 
-      src: ~/Devops/test-node-app/nodejs-app-1.0.0.tgz
-      dest: /home/abd
+      src: "{{location}}/nodejs-app-{{version}}.tgz"
+      dest: "{{destination}}"
   - name: Install dependencies
     npm: 
-      path: /home/abd/package
+      path: "{{destination}}/package"
   - name: Start App
     command: 
-      chdir: /home/abd/package/app/
+      chdir: "{{destination}}/package/app/"
       cmd: node server
     async: 1000
     poll: 0

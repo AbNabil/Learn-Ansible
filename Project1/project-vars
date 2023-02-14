@@ -1,0 +1,4 @@
+version: 1.0.0
+location: ~/Devops/test-node-app
+user: abd
+destination: /home/{{user}}
